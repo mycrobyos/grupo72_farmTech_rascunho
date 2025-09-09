@@ -1,4 +1,5 @@
 import sys
+import csv
 
 # Dados organizados em vetores (listas)
 culturas = ["Soja", "Café"]
@@ -11,7 +12,8 @@ def menu():
     print("2. Exibir dados")
     print("3. Atualizar dados")
     print("4. Remover dados")
-    print("5. Sair do programa")
+    print("5. Exportar dados para CSV")  # Novo item no menu
+    print("6. Sair do programa")  # Atualizado para refletir a nova opção
     opcao = input("Escolha uma opção: ")
     return opcao
 
@@ -80,6 +82,22 @@ def deletar_dados():
         del manejos[idx]
         print("Manejo deletado com sucesso.")
 
+def exportar_dados():
+    """Exportar dados de áreas e manejos para arquivos CSV."""
+    # Exportar áreas
+    with open("areas_export.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Cultura", "Área (m²)"])  # Cabeçalhos
+        writer.writerows(areas)  # Dados
+    print("Dados de áreas exportados para 'areas_export.csv'.")
+
+    # Exportar manejos
+    with open("manejos_export.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Cultura", "Produto", "Qtde/m (mL/m)", "Total (mL)"])  # Cabeçalhos
+        writer.writerows(manejos)  # Dados
+    print("Dados de manejos exportados para 'manejos_export.csv'.")
+
 def main():
     while True:
         opcao = menu()
@@ -92,6 +110,8 @@ def main():
         elif opcao == "4":
             deletar_dados()
         elif opcao == "5":
+            exportar_dados()
+        elif opcao == "6":
             print("Saindo do programa...")
             sys.exit()
         else:
