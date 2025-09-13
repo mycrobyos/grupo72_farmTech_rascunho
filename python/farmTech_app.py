@@ -2,7 +2,7 @@ import sys
 import csv
 
 # Dados organizados em vetores (listas)
-culturas = ["Soja", "Café"]
+culturas = ["Café", "Cana"]  # Suporte explícito para Café e Cana
 areas = []
 manejos = []
 
@@ -25,76 +25,73 @@ def entrada_dados():
     cultura = culturas[tipo]
 
     # Área de plantio (Retângulo para ambas as culturas)
-    print(f"Área de {cultura} será calculada como Retângulo.")
-    largura = float(input("Digite a largura do terreno (m): "))
-    comprimento = float(input("Digite o comprimento do terreno (m): "))
+    print(f"\nÁrea de {cultura} será calculada como Retângulo.")
+    largura = float(input("\nDigite a largura do terreno (m): "))
+    comprimento = float(input("\nDigite o comprimento do terreno (m): "))
     area = largura * comprimento
-    print(f"Área calculada: {area:.2f} m²")
+    print(f"\n\nÁrea calculada: {area:.2f} m²")
     areas.append((cultura, area))
 
     # Manejo de insumos
-    produto = input("Nome do produto a aplicar: ")
-    quantidade_por_metro = float(input("Quantidade do produto por metro (mL/m): "))
-    ruas = int(input("Quantas ruas tem a lavoura? "))
-    metros_por_rua = float(input("Quantos metros tem cada rua? "))
-    total_metros = ruas * metros_por_rua
-    total_produto = quantidade_por_metro * total_metros
-    print(f"Total de produto necessário: {total_produto:.2f} mL")
+    produto = input("\nNome do produto a aplicar: ")
+    quantidade_por_metro = float(input("\nQuantidade do produto por metro quadrado (mL/m²): "))
+    total_produto = quantidade_por_metro * area
+    print(f"\n\nTotal de produto necessário: {total_produto:.2f} mL")
 
     manejos.append((cultura, produto, quantidade_por_metro, total_produto))
 
 def saida_dados():
-    print("\n--- Dados de Áreas ---")
+    print("\n--- Dados de Áreas ---\n")
     for i, (cultura, area) in enumerate(areas):
-        print(f"{i}: Cultura: {cultura}, Área: {area:.2f} m²")
-    print("--- Dados de Manejo ---")
+        print(f"{i}: Cultura: {cultura}, Área: {area:.2f} m²\n")
+    print("--- Dados de Manejo ---\n")
     for i, dado in enumerate(manejos):
-        print(f"{i}: Cultura: {dado[0]}, Produto: {dado[1]}, Qtde/m: {dado[2]} mL/m, Total: {dado[3]:.2f} mL")
+        print(f"{i}: Cultura: {dado[0]}, Produto: {dado[1]}, Qtde/m: {dado[2]} mL/m, Total: {dado[3]:.2f} mL\n")
 
 def atualizar_dados():
-    print("\nDeseja atualizar área ou manejo? (1-Área, 2-Manejo)")
+    print("\nDeseja atualizar área ou manejo? (1-Área, 2-Manejo)\n")
     tipo = input("Escolha: ")
     if tipo == "1":
         saida_dados()
         idx = int(input("Digite o índice da área a atualizar: "))
         nova_area = float(input("Digite o novo valor da área: "))
         areas[idx] = (areas[idx][0], nova_area)
-        print("Área atualizada com sucesso.")
+        print("\nÁrea atualizada com sucesso.\n")
     elif tipo == "2":
         saida_dados()
         idx = int(input("Digite o índice do manejo a atualizar: "))
         novo_total = float(input("Digite o novo total de produto necessário: "))
         cultura, prod, qtde_m, _ = manejos[idx]
         manejos[idx] = (cultura, prod, qtde_m, novo_total)
-        print("Manejo atualizado com sucesso.")
+        print("\nManejo atualizado com sucesso.\n")
 
 def deletar_dados():
-    print("\nDeseja deletar área ou manejo? (1-Área, 2-Manejo)")
+    print("\nDeseja deletar área ou manejo? (1-Área, 2-Manejo)\n")
     tipo = input("Escolha: ")
     if tipo == "1":
         saida_dados()
         idx = int(input("Digite o índice da área a deletar: "))
         del areas[idx]
-        print("Área deletada com sucesso.")
+        print("\nÁrea deletada com sucesso.\n")
     elif tipo == "2":
         saida_dados()
         idx = int(input("Digite o índice do manejo a deletar: "))
         del manejos[idx]
-        print("Manejo deletado com sucesso.")
+        print("\nManejo deletado com sucesso.\n")
 
 def exportar_dados():
     """Exportar dados de áreas e manejos para arquivos CSV."""
     # Exportar áreas
     with open("areas_export.csv", "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Cultura", "Área (m²)"])  # Cabeçalhos
+        writer.writerow(["Cultura", "Area"])  # Cabeçalhos
         writer.writerows(areas)  # Dados
     print("Dados de áreas exportados para 'areas_export.csv'.")
 
     # Exportar manejos
     with open("manejos_export.csv", "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Cultura", "Produto", "Qtde/m (mL/m)", "Total (mL)"])  # Cabeçalhos
+        writer.writerow(["Cultura", "Produto", "Qtde", "Total"])  # Cabeçalhos
         writer.writerows(manejos)  # Dados
     print("Dados de manejos exportados para 'manejos_export.csv'.")
 
